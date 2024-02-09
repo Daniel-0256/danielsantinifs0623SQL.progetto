@@ -1,0 +1,78 @@
+ES01
+SELECT COUNT(*) AS NumeroVerbaliTrascritti
+FROM Verbali
+WHERE DataTrascrizioneVerbale IS NOT NULL;
+
+ES02
+SELECT A.Nome, A.Cognome, COUNT(V.IDVerbale) AS NumeroVerbaliTrascritti
+FROM MULTE M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+WHERE V.DataTrascrizioneVerbale IS NOT NULL
+GROUP BY M.IDAnagrafica, A.Nome, A.Cognome;
+
+ES03
+SELECT TV.descrizione AS TipoViolazione, COUNT(V.IDVerbale) AS NumeroVerbaliTrascritti
+FROM MULTE M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN Violazioni TV ON M.IDViolazione = TV.IDViolazione
+WHERE V.DataTrascrizioneVerbale IS NOT NULL
+GROUP BY TV.descrizione;
+
+ES04
+SELECT A.IDAnagrafica, A.Nome, A.Cognome, SUM(V.DecurtamentoPunti) AS TotalePuntiDecurtati
+FROM MULTE M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+GROUP BY A.IDAnagrafica, A.Nome, A.Cognome;
+
+ES05
+SELECT A.Cognome, A.Nome, V.DataViolazione, V.IndirizzoViolazione, V.Importo, V.DecurtamentoPunti
+FROM MULTE M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+WHERE A.Citta = 'Palermo';
+
+ES06
+SELECT A.Cognome, A.Nome, V.IndirizzoViolazione, V.DataViolazione, V.Importo, V.DecurtamentoPunti
+FROM Multe M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+WHERE V.DataViolazione BETWEEN '04/01/2024' AND '17/01/2024';
+
+ES07
+SELECT A.Cognome, A.Nome, SUM(V.Importo) AS TotaleImporti
+FROM MULTE M
+INNER JOIN Verbali V ON M.IDVerbale = V.IDVerbale
+INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+GROUP BY A.Cognome, A.Nome;
+
+ES08
+SELECT *
+FROM ANAGRAFICA
+WHERE Citta = 'Palermo';
+
+ES09
+SELECT DataViolazione, Importo, DecurtamentoPunti
+FROM Verbali
+WHERE DataViolazione = '02/01/2024 09:00:00';
+
+ES10
+SELECT A.NomeAgente, A.CognomeAgente, COUNT(*) AS NumeroViolazioni
+FROM verbali V
+INNER JOIN agenti A ON V.IDAgente = A.IDAgente
+GROUP BY A.NomeAgente, A.CognomeAgente;
+
+ES11
+SELECT A.Cognome, A.Nome, V.IndirizzoViolazione, V.DataViolazione, V.Importo, V.DecurtamentoPunti
+FROM multe M
+INNER JOIN anagrafica A ON M.IDAnagrafica = A.IDAnagrafica
+INNER JOIN verbali V ON M.IDVerbale = V.IDVerbale
+WHERE V.DecurtamentoPunti > 5;
+
+ES12
+SELECT A.Cognome, A.Nome, V.IndirizzoViolazione, V.DataViolazione, V.Importo, V.DecurtamentoPunti
+FROM multe M
+INNER JOIN anagrafica A ON M.IDAnagrafica = A.IDAnagrafica
+INNER JOIN verbali V ON M.IDVerbale = V.IDVerbale
+WHERE V.importo > 150;

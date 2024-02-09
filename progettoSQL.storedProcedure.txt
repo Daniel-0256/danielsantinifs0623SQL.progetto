@@ -1,0 +1,52 @@
+ES1
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE VisualizzaContravvenzioniPerAnno
+    @Anno varchar(4)
+AS
+BEGIN
+    SELECT A.Cognome, A.Nome, V.IndirizzoViolazione, V.DataViolazione, V.Importo, V.DecurtamentoPunti
+    FROM Multe M
+    INNER JOIN ANAGRAFICA A ON M.IDAnagrafica = A.IDAnagrafica
+	INNER JOIN VERBALI V ON M.IDVerbale = V.IDVerbale
+    WHERE YEAR(V.DataViolazione) = @Anno;
+END;
+GO
+
+ES2
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE VisualizzaTotalePuntiDecurtatiPerDataa
+    @DataViolazione DATETIME
+AS
+BEGIN
+    SELECT SUM(DecurtamentoPunti) AS TotalePuntiDecurtati
+    FROM Verbali
+    WHERE DataViolazione = @DataViolazione;
+END;
+
+GO
+
+ES03
+GO
+/****** Object:  StoredProcedure [dbo].[EliminaVerbale]    Script Date: 09/02/2024 15:01:37 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[EliminaVerbale]
+    @IDVerbale INT
+AS
+BEGIN
+	DELETE FROM Multe 
+	WHERE IDVerbale = @IDVerbale
+    DELETE FROM Verbali
+    WHERE IDVerbale = @IDVerbale;
+END;
